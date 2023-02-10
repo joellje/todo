@@ -1,0 +1,23 @@
+{
+  "name": "trex",
+  "version": "1.0.0",
+  "description": "exercise tracker (work in progress!)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd backend && npx nodemon index.js\" \"cd frontend && npm start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joellje/trex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joellje/trex/issues"
+  },
+  "homepage": "https://github.com/joellje/trex#readme",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
