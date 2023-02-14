@@ -4,11 +4,6 @@ const TodoController = require("../controllers/todoController");
 require("dotenv").config();
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.status(200).json("Hello");
-  console.log("Hello");
-});
-
 router.param("id", (req, res, next, val) => {
   console.log(`${val}`);
   next();
@@ -17,12 +12,15 @@ router.param("id", (req, res, next, val) => {
 router
   .route("/")
   .get(TodoController.getAllTodos)
-  .post(TodoController.createTodo);
+  .post(TodoController.createTodo)
+  .put(TodoController.updateAllTodos)
+  .delete(TodoController.deleteAllTodos);
 
 router
   .route("/:id")
   .get(TodoController.getTodo)
-  .delete(TodoController.deleteTodo)
-  .put(TodoController.updateTodo);
+  .delete(TodoController.deleteTodo);
+
+router.route("/:id/:completed").put(TodoController.updateTodo);
 
 module.exports = router;
