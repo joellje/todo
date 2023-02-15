@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const todoSchema = mongoose.Schema({
   task: {
     type: String,
-    required: true,
-    unique: true,
+    required: [true, "Enter a task."],
+    unique: [true, "Task is already present."],
   },
   completed: {
     type: Boolean,

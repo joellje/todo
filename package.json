@@ -19,5 +19,8 @@
   "homepage": "https://github.com/joellje/trex#readme",
   "devDependencies": {
     "concurrently": "^7.6.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }

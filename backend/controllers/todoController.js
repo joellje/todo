@@ -5,31 +5,30 @@ exports.getAllTodos = async (req, res, next) => {
     const result = await Todo.find();
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
   }
 };
 
 exports.getTodo = async (req, res, next) => {
   try {
-    id = req.params.id;
-    const result = await Todo.findById(id);
+    targetId = req.params.id;
+    const result = await Todo.findById(targetId);
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
+    // res.status(400).json(err);
   }
 };
 
 exports.createTodo = async (req, res, next) => {
   try {
-    body = req.body;
-    newtask = body["task"];
-    complete = body["completed"];
-    const newTodo = await Todo.create({ task: newtask, completed: complete });
+    const body = req.body;
+    const newtask = body["task"];
+    const newTodo = await Todo.create({ task: newtask, completed: false });
     res.status(200).json(newTodo);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
   }
-  // check for unique todo name
 };
 
 exports.updateAllTodos = async (req, res, next) => {
@@ -38,14 +37,12 @@ exports.updateAllTodos = async (req, res, next) => {
 
 exports.updateTodo = async (req, res, next) => {
   try {
-    id = req.params.id;
-    complete = req.params.completed;
-    const todo = await Todo.findById(id);
-    console.log(todo);
-    const result = await todo.set({ completed: complete });
+    targetId = req.params.id;
+    const todo = await Todo.findById(targetId);
+    const result = await todo.set({ completed: !todo.completed }).save();
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
   }
 };
 
@@ -54,17 +51,16 @@ exports.deleteAllTodos = async (req, res, next) => {
     const result = await Todo.deleteMany();
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
   }
 };
 
 exports.deleteTodo = async (req, res, next) => {
-  // return error when id not present
   try {
-    targetid = req.params.id;
-    const result = await Todo.deleteOne({ id: targetid });
+    targetId = req.params.id;
+    const result = await Todo.deleteOne({ _id: targetId });
     res.status(200).json(result);
   } catch (err) {
-    res.status(400).json(err);
+    next(err);
   }
 };
