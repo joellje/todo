@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router(); // route level middle-ware (index)
 const TodoController = require("../controllers/todoController.js");
-const ErrorController = require("../controllers/errorController.js");
+const AuthController = require("../controllers/authController.js");
 require("dotenv").config();
 
 router.param("id", (req, res, next, val) => {
@@ -11,17 +11,19 @@ router.param("id", (req, res, next, val) => {
 
 router
   .route("/")
-  .get(TodoController.getAllTodos)
-  .post(TodoController.createTodo)
-  .put(TodoController.updateAllTodos)
-  .delete(TodoController.deleteAllTodos);
+  .get(AuthController.protect, TodoController.getAllTodos)
+  .post(AuthController.protect, TodoController.createTodo)
+  .put(AuthController.protect, TodoController.updateAllTodos)
+  .delete(AuthController.protect, TodoController.deleteAllTodos);
 
 router
   .route("/:id")
-  .get(TodoController.getTodo)
-  .put(TodoController.updateTodo)
-  .delete(TodoController.deleteTodo);
-
-router.use(ErrorController);
+  .get(AuthController.protect, TodoController.getTodo)
+  .put(AuthController.protect, TodoController.updateTodo)
+  .delete(
+    AuthController.protect,
+    AuthController.restrictTo("admin"),
+    TodoController.deleteTodo
+  );
 
 module.exports = router;

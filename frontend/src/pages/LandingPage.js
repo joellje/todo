@@ -1,90 +1,82 @@
 import React, { useState, useEffect } from "react";
-import Todo from "../components/Todo.js";
+import GoogleLogin from "react-google-login";
+import axios from "axios";
+import { isEmpty } from "lodash";
 
-export default function LandingPage() {
-  const [task, setTask] = useState("");
-  const [allTodos, setAllTodos] = useState([]);
+function LandingPage() {
+  const [isLoggedIn, setLoginStatus] = useState(false);
+
+  const getAllUsers = async () => {
+    const data = await axios.get("/user/authenticated/getAll");
+    console.log(data);
+  };
+
+  const responseGoogle = async (response) => {
+    const bodyObject = {
+      authId: response.tokenId,
+    };
+    try {
+      if (isEmpty(response.errors)) {
+        await axios.post("/login/user", bodyObject);
+        setLoginStatus(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await axios.get("/logout/user");
+      setLoginStatus(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    getAllTodos();
+    async function getStatus() {
+      try {
+        const data = await axios.get("/user/checkLoginStatus");
+        console.log(data);
+        if (isEmpty(data.error)) {
+          setLoginStatus(true);
+        }
+      } catch (e) {
+        console.log(e);
+        setLoginStatus(false);
+      }
+    }
+    getStatus();
   }, []);
 
-  const getAllTodos = async () => {
-    const res = await fetch("http://localhost:5000/todos/", {
-      method: "GET",
-    });
-    const allTodos = await res.json();
-    if (res.status === 200) {
-      console.log(allTodos);
-      setAllTodos(allTodos);
-    } else {
-      console.log("Error getting all Todos.");
-    }
-  };
-
-  const handleDeleteAll = async () => {
-    const res = await fetch("http://localhost:5000/todos/", {
-      method: "DELETE",
-    });
-    if (res.status === 200) {
-      console.log("All Todos Deleted");
-    } else {
-      console.log("Error deleting all Todos.");
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const res = await fetch("http://localhost:5000/todos/", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        task: `${task}`,
-      }),
-    });
-    const resJson = await res.json();
-    if (res.status === 200) {
-      console.log("Created!");
-      setTask("");
-      getAllTodos();
-    } else {
-      alert(resJson.messages);
-    }
-  };
-
   return (
-    <form>
-      <label>
-        Task:
-        <input
-          type="text"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
+    <div className="App">
+      <header className="App-header">
+        <p>Google Login Raect/Node/Express</p>
+      </header>
+      <body>
+        <GoogleLogin
+          clientId="<--client id-->"
+          render={(renderProps) => (
+            <button
+              className="btn g-sigin"
+              onClick={renderProps.onClick}
+              disabled={renderProps.disabled}
+            >
+              <p>Continue with Google</p>
+            </button>
+          )}
+          buttonText="Login"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={"single_host_origin"}
         />
-      </label>
-      <input
-        type="submit"
-        value="Submit"
-        className="text-xl mb-2 border-2"
-        onClick={handleSubmit}
-      />
-      <button className="text-xl mb-2 border-2" onClick={handleDeleteAll}>
-        Delete All
-      </button>
-      <div className="pt-10 flex flex-col gap-2 justify-center">
-        {allTodos.map((todo) => (
-          <Todo
-            task={todo.task}
-            key={todo._id}
-            id={todo._id}
-            completed={todo.completed}
-          ></Todo>
-        ))}
-      </div>
-    </form>
+        <button onClick={getAllUsers}>Get All Users in db</button>
+        {isLoggedIn && <button onClick={logout}>Logout</button>}
+      </body>
+    </div>
   );
 }
+
+export default LandingPage;

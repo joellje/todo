@@ -12,21 +12,30 @@ const handleValidationError = (err, res) => {
   let fields = Object.values(err.errors).map((el) => el.path);
   let code = 400;
   if (errors.length > 1) {
-    const formattedErrors = errors.join("");
-    res.status(code).send({ messages: formattedErrors, fields: fields });
+    // const formattedErrors = errors.join(" ");
+    res.status(code).send({ messages: errors, fields: fields });
   } else {
     res.status(code).send({ messages: errors, fields: fields });
   }
 };
 
+const handleJWTError = (res) => {
+  return res.status(401).send("Invalid token. Please log in again!");
+};
+
 module.exports = (err, req, res, next) => {
   try {
-    console.log("Error Middleware");
+    console.log("Error is", err);
     if (err.name === "ValidationError") {
       return (err = handleValidationError(err, res));
     }
     if (err.code && err.code == 11000) {
       return (err = handleDuplicateKeyError(err, res));
+    }
+    if (err.name === "JsonWebTokenError") {
+      handleJWTError(res);
+    } else {
+      res.status(err.code).send(err);
     }
   } catch (err) {
     res.status(500).send("An unknown error occurred.");
