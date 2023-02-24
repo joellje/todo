@@ -5,11 +5,13 @@ const todoSchema = mongoose.Schema({
   task: {
     type: String,
     required: [true, "Enter a task."],
-    unique: [true, "Task is already present."],
   },
   completed: {
     type: Boolean,
     default: true,
+  },
+  userId: {
+    type: String,
   },
 });
 

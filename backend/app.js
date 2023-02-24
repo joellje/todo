@@ -31,21 +31,22 @@ app.use(limiter);
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
-
 // Data sanitization against XSS
 app.use(xss());
-
 app.use(hpp());
 
+//Routes
 app.use("/", indexRouter);
 app.use("/todos", todoRouter);
 app.use("/users", userRouter);
 
+// Catch-all Middleware
 app.all("*", (req, res, next) => {
   const err = new Error("Page not Found.");
   next(err);
 });
 
+// Error Middeware
 app.use(ErrorController);
 
 module.exports = app;

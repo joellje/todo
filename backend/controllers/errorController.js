@@ -25,7 +25,7 @@ const handleJWTError = (res) => {
 
 module.exports = (err, req, res, next) => {
   try {
-    console.log("Error is", err);
+    console.log(err);
     if (err.name === "ValidationError") {
       return (err = handleValidationError(err, res));
     }
@@ -35,7 +35,7 @@ module.exports = (err, req, res, next) => {
     if (err.name === "JsonWebTokenError") {
       handleJWTError(res);
     } else {
-      res.status(err.code).send(err);
+      res.status(err.code).send(err.message);
     }
   } catch (err) {
     res.status(500).send("An unknown error occurred.");

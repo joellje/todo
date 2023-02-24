@@ -13,17 +13,13 @@ router
   .route("/")
   .get(AuthController.protect, TodoController.getAllTodos)
   .post(AuthController.protect, TodoController.createTodo)
-  .put(AuthController.protect, TodoController.updateAllTodos)
+  .put(AuthController.protect, TodoController.completeAllTodos)
   .delete(AuthController.protect, TodoController.deleteAllTodos);
 
 router
   .route("/:id")
   .get(AuthController.protect, TodoController.getTodo)
   .put(AuthController.protect, TodoController.updateTodo)
-  .delete(
-    AuthController.protect,
-    AuthController.restrictTo("admin"),
-    TodoController.deleteTodo
-  );
+  .delete(AuthController.protect, TodoController.deleteTodo);
 
 module.exports = router;

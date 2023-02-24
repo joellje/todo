@@ -9,9 +9,12 @@ export default function TodoPage() {
     getAllTodos();
   }, []);
 
+  const token = JSON.parse(localStorage.getItem("token"))["value"];
+
   const getAllTodos = async () => {
     const res = await fetch("http://localhost:5000/todos/", {
       method: "GET",
+      headers: { authorization: `Bearer ${token}` },
     });
     const allTodos = await res.json();
     if (res.status === 200) {
@@ -22,12 +25,26 @@ export default function TodoPage() {
     }
   };
 
+  const handleCompleteAllTodos = async () => {
+    const res = await fetch("http://localhost:5000/todos/", {
+      method: "PUT",
+      headers: { authorization: `Bearer ${token}` },
+    }); 
+    if (res.status === 200) {
+      getAllTodos();
+    } else {
+      console.log("Error completing all todos.");
+    }
+  };
+
   const handleDeleteAll = async () => {
     const res = await fetch("http://localhost:5000/todos/", {
       method: "DELETE",
+      headers: { authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
       console.log("All Todos Deleted");
+      getAllTodos();
     } else {
       console.log("Error deleting all Todos.");
     }
@@ -41,6 +58,7 @@ export default function TodoPage() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         task: `${task}`,
@@ -57,23 +75,31 @@ export default function TodoPage() {
   };
 
   return (
-    <form>
-      <label>
-        Task:
+    <>
+      <form>
+        <label>
+          Task:
+          <input
+            type="text"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+        </label>
         <input
-          type="text"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
+          type="submit"
+          value="Submit"
+          className="text-xl mb-2 border-2"
+          onClick={handleSubmit}
         />
-      </label>
-      <input
-        type="submit"
-        value="Submit"
-        className="text-xl mb-2 border-2"
-        onClick={handleSubmit}
-      />
+      </form>
       <button className="text-xl mb-2 border-2" onClick={handleDeleteAll}>
         Delete All
+      </button>
+      <button
+        className="text-xl mb-2 border-2"
+        onClick={handleCompleteAllTodos}
+      >
+        Complete All
       </button>
       <div className="pt-10 flex flex-col gap-2 justify-center">
         {allTodos.map((todo) => (
@@ -85,6 +111,6 @@ export default function TodoPage() {
           ></Todo>
         ))}
       </div>
-    </form>
+    </>
   );
 }

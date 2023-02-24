@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { promisify } = require("util");
 const sendEmail = require("../utils/email");
+const newError = require("../utils/newError");
+
 require("dotenv").config();
 
 const signToken = (id) => {
@@ -61,9 +63,9 @@ exports.logIn = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
     const correct = await user.correctPassword(password, user.password);
     if (!user || !correct) {
-      const err = new Error("User does not exist or password is invalid.");
-      err.code = 401;
-      return next(err);
+      return next(
+        new newError("User does not exist or password is invalid.", 401)
+      );
     }
 
     createSendToken(user, 200, res);
@@ -83,9 +85,7 @@ exports.protect = async (req, res, next) => {
     }
 
     if (!token) {
-      const err = new Error("You are not logged in.");
-      err.code = 401;
-      return next(err);
+      return next(new newError("You are not logged in.", 401));
     }
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -93,18 +93,19 @@ exports.protect = async (req, res, next) => {
     // Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
-      const err = new Error("The user belonging to this token does not exist.");
-      err.code = 401;
-      return next(err);
+      return next(
+        new newError("The user belonging to this token does not exist.", 401)
+      );
     }
 
     // Check if user changed password after token was issued
     if (currentUser.changedPasswordAfter(decoded.iat)) {
-      const err = new Error(
-        "User recently changed password. Please log in again."
+      return next(
+        new newError(
+          "User recently changed password. Please log in again.",
+          401
+        )
       );
-      err.code = 401;
-      return next(err);
     }
     // grant access to protected route
     req.user = currentUser;
@@ -117,11 +118,9 @@ exports.protect = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      const err = new Error(
-        "You do not have permission to perform this action."
+      return next(
+        new newError("You do not have permission to perform this action.", 403)
       );
-      err.code = 403;
-      return next(err);
     }
     next();
   };
@@ -142,9 +141,7 @@ exports.resetPassword = async (req, res, next) => {
 
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
-      const err = new Error("Token is invalid or has expired.");
-      err.code = 400;
-      return next(err);
+      return next(new newError("Token is invalid or has expired.", 400));
     }
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
@@ -165,9 +162,9 @@ exports.forgetPassword = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      const err = new Error("There is no user with this email address.");
-      err.code = 404;
-      return next(err);
+      return next(
+        new newError("There is no user with this email address.", 404)
+      );
     }
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
@@ -196,11 +193,12 @@ exports.forgetPassword = async (req, res, next) => {
       user.passwordResetExpires = undefined;
       await user.save({ validateBeforeSave: false });
 
-      const newErr = new Error(
-        "There was an error sending the email. Try again later!."
+      return next(
+        new newError(
+          "There was an error sending the email. Try again later!.",
+          500
+        )
       );
-      newErr.code = 500;
-      return next(newErr);
     }
   } catch (err) {
     next(err);
@@ -216,9 +214,7 @@ exports.updatePassword = async (req, res, next) => {
     if (
       !(await user.correctPassword(req.body.passwordCurrent, user.password))
     ) {
-      const err = new Error("Your password is wrong.");
-      err.code = 500;
-      return next(err);
+      return next(new newError("Your password is wrong.", 500));
     }
 
     // 3) If so, update password
