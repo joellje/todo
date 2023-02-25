@@ -111,7 +111,7 @@ export default function TodoPage() {
         >
           Log Out
         </button>
-        <div className="flex flex-col justify-center align-middle items-center mt-10 gap-5">
+        <div className="flex flex-col justify-center align-middle items-center mt-10 gap-7">
           <div className="flex flex-row gap-5 align-middle items-center">
             <div class="task-input">
               <label>
@@ -131,7 +131,7 @@ export default function TodoPage() {
               <input
                 type="submit"
                 value="Submit"
-                class="btn btn-outline btn-primary"
+                class="btn btn-primary"
                 onClick={handleSubmit}
               />
             </div>
@@ -139,18 +139,18 @@ export default function TodoPage() {
 
           <div className="flex flex-row gap-5">
             <div>
-              <button class="btn" onClick={handleDeleteAll}>
+              <button class="btn btn-accent" onClick={handleDeleteAll}>
                 Delete All
               </button>
             </div>
 
             <div>
-              <button class="btn" onClick={handleCompleteAllTodos}>
+              <button class="btn btn-accent" onClick={handleCompleteAllTodos}>
                 Complete All
               </button>
             </div>
           </div>
-          <div className="pt-10 flex flex-col gap-2 justify-center">
+          <div className="flex flex-col gap-4 justify-center">
             {allTodos.map((todo) => (
               <Todo
                 task={todo.task}

@@ -21,7 +21,7 @@ export default function Todo(props) {
     }
   };
 
-  const handleComplete = async () => {
+  const handleToggle = async () => {
     try {
       let res = await fetch(`http://localhost:5000/todos/${id}`, {
         method: "PUT",
@@ -40,17 +40,39 @@ export default function Todo(props) {
 
   return (
     <div class="card w-96 bg-neutral text-neutral-content">
-      <div class="card-body items-center text-center">
-        <h2 class={`card-title ${props.completed ? "line-through" : ""}`}>
-          {props.task}
-        </h2>
-        <div class="card-actions justify-end">
-          <button class="btn btn-primary" onClick={handleComplete}>
-            Complete
-          </button>
-          <button class="btn btn-ghost" onClick={handleDelete}>
-            Delete
-          </button>
+      <div class="card-body items-center text-center flex flex-row justify-between">
+        <h2 class="card-title">{props.task}</h2>
+
+        <div class="card-actions flex flex-row justify-center items-center align-middle">
+          <div className="h-6 w-6">
+            <div className="tooltip" data-tip="Complete?">
+              <input
+                type="checkbox"
+                checked={`${props.completed ? "checked" : ""}`}
+                className="checkbox h-6 w-6"
+                onClick={handleToggle}
+              />
+            </div>
+          </div>
+
+          <div>
+            <button className="btn btn-square" onClick={handleDelete}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

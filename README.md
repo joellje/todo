@@ -1,14 +1,23 @@
-<h1 align="center">todo</h1>
+# Todo
 
-  <p align="center">
-    web app to track to-dos! (work in progress)
-  </p>
-</div>
+Transform the way you manage your tasks with this secure and intuitive todo app, featuring seamless authentication and persistent sessions to keep you on track all day, every day.
+
+### Login Page
+
+![Login Page](/assets/todologin.png)
+
+### Signup Page
+
+![Signup Page](/assets/todosignup.png)
+
+### Todos Page
+
+![Todos Page](/assets/todoss.png)
 
 ### Built With
 
-- MongoDB
-- Express.js
-- React.js
-- Node.js
-- TailwindCSS
+- [MongoDB](https://www.mongodb.com/)
+- [Express.js](https://expressjs.com/)
+- [React.js](https://reactjs.org/)
+- [Node.js](https://nodejs.org/en/)
+- [TailwindCSS](https://tailwindcss.com/) & [daisyUI](https://daisyui.com/)

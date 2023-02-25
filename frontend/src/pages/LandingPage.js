@@ -69,6 +69,10 @@ function LandingPage() {
 
       <div class="hero min-h-screen bg-base-200 flex flex-col gap-5 justify-center">
         <h1 class="text-5xl font-bold">Todo</h1>
+        <h2 class="text-3xl">
+          Streamline your day with a personalized todo app designed for you.
+        </h2>
+
         <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <div class="card-body">
             <div class="form-control">
@@ -86,7 +90,7 @@ function LandingPage() {
                 <span class="label-text">Password</span>
               </label>
               <input
-                type="text"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
