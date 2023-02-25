@@ -2,14 +2,17 @@ import React from "react";
 
 export default function Todo(props) {
   const id = props.id;
+  const token = localStorage.getItem("token");
+
   const handleDelete = async () => {
     try {
       let res = await fetch(`http://localhost:5000/todos/${id}`, {
         method: "DELETE",
+        headers: { authorization: `Bearer ${token}` },
       });
       let result = await res.json();
       if (res.status === 200) {
-        console.log(`deleting ${result}`);
+        props.getAllTodos();
       } else {
         alert(`ERROR`);
       }
@@ -22,10 +25,11 @@ export default function Todo(props) {
     try {
       let res = await fetch(`http://localhost:5000/todos/${id}`, {
         method: "PUT",
+        headers: { authorization: `Bearer ${token}` },
       });
       let result = await res.json();
       if (res.status === 200) {
-        console.log(`updating ${result}`);
+        props.getAllTodos();
       } else {
         alert(`ERROR`);
       }
@@ -35,22 +39,21 @@ export default function Todo(props) {
   };
 
   return (
-    <div
-      className={`max-w-sm rounded overflow-hidden border-2 ${
-        props.completed ? "line-through" : ""
-      }`}
-    >
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{props.task}</div>
-      </div>
-      <div className="px-6">
-        <button className="text-xl mb-2 border-2" onClick={handleDelete}>
-          Delete
-        </button>
-        <button className="text-xl mb-2 border-2" onClick={handleComplete}>
-          Complete?
-        </button>
+    <div class="card w-96 bg-neutral text-neutral-content">
+      <div class="card-body items-center text-center">
+        <h2 class={`card-title ${props.completed ? "line-through" : ""}`}>
+          {props.task}
+        </h2>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary" onClick={handleComplete}>
+            Complete
+          </button>
+          <button class="btn btn-ghost" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
       </div>
     </div>
+    // </div>
   );
 }

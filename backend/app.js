@@ -22,12 +22,12 @@ app.use(express.json({ limit: "10kb" }));
 
 app.use(helmet()); //set security HTTP Headers
 
-const limiter = rateLimit({
-  max: 100,
-  windowMs: 60 * 60 * 1000,
-  message: "Too many requests from this IP, please try again in an hour!",
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   max: 100,
+//   windowMs: 60 * 60 * 1000,
+//   message: "Too many requests from this IP, please try again in an hour!",
+// });
+// app.use(limiter);
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());

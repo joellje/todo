@@ -12,8 +12,8 @@ const handleValidationError = (err, res) => {
   let fields = Object.values(err.errors).map((el) => el.path);
   let code = 400;
   if (errors.length > 1) {
-    // const formattedErrors = errors.join(" ");
-    res.status(code).send({ messages: errors, fields: fields });
+    const formattedErrors = errors.join(" ");
+    res.status(code).send({ messages: formattedErrors, fields: fields });
   } else {
     res.status(code).send({ messages: errors, fields: fields });
   }
@@ -25,7 +25,7 @@ const handleJWTError = (res) => {
 
 module.exports = (err, req, res, next) => {
   try {
-    console.log(err);
+    console.log("Error Middleware: ", err);
     if (err.name === "ValidationError") {
       return (err = handleValidationError(err, res));
     }
@@ -35,7 +35,7 @@ module.exports = (err, req, res, next) => {
     if (err.name === "JsonWebTokenError") {
       handleJWTError(res);
     } else {
-      res.status(err.code).send(err.message);
+      res.status(err.code).send({ messages: err.message });
     }
   } catch (err) {
     res.status(500).send("An unknown error occurred.");

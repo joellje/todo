@@ -59,7 +59,7 @@ exports.updateTodo = async (req, res, next) => {
 exports.deleteAllTodos = async (req, res, next) => {
   try {
     const result = await Todo.deleteMany({ userId: req.user.id });
-    
+
     res.status(200).json(result);
   } catch (err) {
     next(err);

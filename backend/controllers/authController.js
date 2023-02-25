@@ -61,11 +61,12 @@ exports.logIn = async (req, res, next) => {
       return next(err);
     }
     const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return next(new newError("User does not exist", 401));
+    }
     const correct = await user.correctPassword(password, user.password);
-    if (!user || !correct) {
-      return next(
-        new newError("User does not exist or password is invalid.", 401)
-      );
+    if (!correct) {
+      return next(new newError("Password is invalid.", 401));
     }
 
     createSendToken(user, 200, res);
@@ -168,8 +169,6 @@ exports.forgetPassword = async (req, res, next) => {
     }
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
-
-    console.log(resetToken);
 
     const resetURL = `${req.protocol}//${req.get(
       "host"
