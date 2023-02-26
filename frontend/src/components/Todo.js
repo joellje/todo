@@ -10,7 +10,6 @@ export default function Todo(props) {
         method: "DELETE",
         headers: { authorization: `Bearer ${token}` },
       });
-      let result = await res.json();
       if (res.status === 200) {
         props.getAllTodos();
       } else {
@@ -27,7 +26,6 @@ export default function Todo(props) {
         method: "PUT",
         headers: { authorization: `Bearer ${token}` },
       });
-      let result = await res.json();
       if (res.status === 200) {
         props.getAllTodos();
       } else {
@@ -42,7 +40,6 @@ export default function Todo(props) {
     <div class="card w-96 bg-neutral text-neutral-content">
       <div class="card-body items-center text-center flex flex-row justify-between">
         <h2 class="card-title">{props.task}</h2>
-
         <div class="card-actions flex flex-row justify-center items-center align-middle">
           <div className="h-6 w-6">
             <div className="tooltip" data-tip="Complete?">
@@ -76,6 +73,5 @@ export default function Todo(props) {
         </div>
       </div>
     </div>
-    // </div>
   );
 }
