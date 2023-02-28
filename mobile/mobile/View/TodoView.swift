@@ -14,7 +14,6 @@ struct TodoView: View {
     var name: String
     var completed: Bool
     var handleGetTodos: () -> Void
-
     
     func handleToggle() {
         guard let url = URL(string: "http://localhost:5000/todos/\(id)") else {
@@ -68,10 +67,14 @@ struct TodoView: View {
             
             Spacer()
             
-            completed ? Button("Completed") {
+            completed ? Button(action: {
                 handleToggle()
-            }: Button("Incomplete") {
+            }) {
+                Image(systemName: "checkmark.square")
+            }: Button(action: {
                 handleToggle()
+            }) {
+                Image(systemName: "square")
             }
             
             Button("Delete") {

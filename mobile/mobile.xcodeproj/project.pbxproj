@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE0F802229AE8CF1000495DC /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0F802129AE8CF1000495DC /* AlertView.swift */; };
+		FE0F802429AE8D6D000495DC /* FormLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0F802329AE8D6D000495DC /* FormLabelView.swift */; };
+		FE0F802629AE8D79000495DC /* FormInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0F802529AE8D79000495DC /* FormInputView.swift */; };
+		FE0F802829AE90A3000495DC /* PrimaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0F802729AE90A3000495DC /* PrimaryButtonView.swift */; };
+		FE0F802A29AE90B1000495DC /* SecondaryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0F802929AE90B1000495DC /* SecondaryButtonView.swift */; };
 		FE8B855229ADAA0900DB7B3A /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8B855129ADAA0900DB7B3A /* TestView.swift */; };
 		FEB5651C29AC709C00ACC546 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5651B29AC709C00ACC546 /* LoginView.swift */; };
 		FEB5651E29AC70A600ACC546 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5651D29AC70A600ACC546 /* SignupView.swift */; };
@@ -20,6 +25,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE0F802129AE8CF1000495DC /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		FE0F802329AE8D6D000495DC /* FormLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormLabelView.swift; sourceTree = "<group>"; };
+		FE0F802529AE8D79000495DC /* FormInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormInputView.swift; sourceTree = "<group>"; };
+		FE0F802729AE90A3000495DC /* PrimaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonView.swift; sourceTree = "<group>"; };
+		FE0F802929AE90B1000495DC /* SecondaryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryButtonView.swift; sourceTree = "<group>"; };
 		FE8B855129ADAA0900DB7B3A /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		FEB5651B29AC709C00ACC546 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		FEB5651D29AC70A600ACC546 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
@@ -85,6 +95,11 @@
 			children = (
 				FEBA30D029AC6EE200021DF6 /* ContentView.swift */,
 				FEB5652129AC7AC300ACC546 /* TodoView.swift */,
+				FE0F802129AE8CF1000495DC /* AlertView.swift */,
+				FE0F802329AE8D6D000495DC /* FormLabelView.swift */,
+				FE0F802529AE8D79000495DC /* FormInputView.swift */,
+				FE0F802729AE90A3000495DC /* PrimaryButtonView.swift */,
+				FE0F802929AE90B1000495DC /* SecondaryButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -173,10 +188,15 @@
 			files = (
 				FEBA30D129AC6EE200021DF6 /* ContentView.swift in Sources */,
 				FEBA30DF29AC6FBD00021DF6 /* TodosView.swift in Sources */,
+				FE0F802229AE8CF1000495DC /* AlertView.swift in Sources */,
 				FEB5652229AC7AC300ACC546 /* TodoView.swift in Sources */,
+				FE0F802629AE8D79000495DC /* FormInputView.swift in Sources */,
+				FE0F802829AE90A3000495DC /* PrimaryButtonView.swift in Sources */,
 				FEB5651C29AC709C00ACC546 /* LoginView.swift in Sources */,
+				FE0F802429AE8D6D000495DC /* FormLabelView.swift in Sources */,
 				FE8B855229ADAA0900DB7B3A /* TestView.swift in Sources */,
 				FEB5652029AC70B000ACC546 /* OnboardingView.swift in Sources */,
+				FE0F802A29AE90B1000495DC /* SecondaryButtonView.swift in Sources */,
 				FEBA30CF29AC6EE200021DF6 /* mobileApp.swift in Sources */,
 				FEB5651E29AC70A600ACC546 /* SignupView.swift in Sources */,
 			);

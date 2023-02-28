@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State var email = ""
     @State var password = ""
-    @State var errorMessage = ""
+    @State var errorMessages = [String]()
     
     func logIn() {
         guard let url = URL(string: "http://localhost:5000/users/login") else {
@@ -33,8 +33,10 @@ struct LoginView: View {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])as? [String: Any]
                     if response.statusCode != 200 {
-                        errorMessage = json?["messages"] as? String ?? ""
-                        print("Response: \(errorMessage)")
+                        if let dictionary = json, let messages = dictionary["messages"] as? [String] {
+                            errorMessages = messages
+                            print("Response: \(errorMessages)")
+                        }
                     } else {
                         email = ""
                         password = ""
@@ -48,22 +50,37 @@ struct LoginView: View {
     }
     
     var body: some View {
-        Text("Enter your Email:")
-        TextField("Email", text: $email)
-            .padding()
-            .border(Color.gray, width: 1)
-        Text("Enter your Password:")
-        TextField("Password", text: $password)
-            .padding()
-            .border(Color.gray, width: 1)
+        ZStack {
+            Color("ColorBackground")
+                .ignoresSafeArea(.all, edges:.all)
+            
+            
+            VStack {
+                FormLabelView(label: "Enter your Email:")
+                FormInputView(placeholder: "Email", input: $email)
+                FormLabelView(label: "Enter your Password:")
+                FormInputView(placeholder: "Password", input: $password)
+                
+                PrimaryButtonView(text: "Log In") {
+                    errorMessages = []
+                    logIn()
+                }
+            }
+            
+            if !(errorMessages.isEmpty){
+                VStack {
+                    ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
+                        AlertView(message: errorMessage)
+                    }
+                }
+            }
+        }
         
-        Button("Log In") {
-            errorMessage = ""
-            logIn()
-        }
-        if !(errorMessage.isEmpty){
-            Text("\(errorMessage)")
-        }
+        
+        
+        
+        
+        
     }
     
 }

@@ -12,7 +12,7 @@ struct SignupView: View {
     @State var email = ""
     @State var password = ""
     @State var passwordConfirm = ""
-    @State var errorMessage = ""
+    @State var errorMessages = [String]()
     
     func signUp() {
         guard let url = URL(string: "http://localhost:5000/users/signup") else {
@@ -33,10 +33,12 @@ struct SignupView: View {
                 print("Error: \(error.localizedDescription)")
             } else if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])as? [String: Any]
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     if response.statusCode != 201 {
-                        errorMessage = json?["messages"] as? String ?? ""
-                        print("Response: \(errorMessage)")
+                        if let dictionary = json, let messages = dictionary["messages"] as? [String] {
+                            errorMessages = messages
+                            print("Response: \(errorMessages)")
+                        }
                     } else {
                         name = ""
                         email = ""
@@ -52,32 +54,31 @@ struct SignupView: View {
     }
     
     var body: some View {
-        Text("Enter your Name:")
-        TextField("Name", text: $name)
-            .padding()
-            .border(Color.gray, width: 1)
+        Color("ColorBackground")
+            .ignoresSafeArea(.all, edges:.all)
         
-        Text("Enter your Email:")
-        TextField("Email", text: $email)
-            .padding()
-            .border(Color.gray, width: 1)
-        
-        Text("Enter your Password:")
-        TextField("Password", text: $password)
-            .padding()
-            .border(Color.gray, width: 1)
-
-        Text("Confirm your Password:")
-        TextField("PasswordConfirm", text: $passwordConfirm)
-            .padding()
-            .border(Color.gray, width: 1)
-        
-        Button("Sign Up") {
-            errorMessage = ""
-            signUp()
+        VStack {
+            FormLabelView(label: "Enter your Name:")
+            FormInputView(placeholder: "Name", input: $name)
+            FormLabelView(label: "Enter your Email:")
+            FormInputView(placeholder: "Email", input: $email)
+            FormLabelView(label: "Enter your Password:")
+            FormInputView(placeholder: "Password", input: $password)
+            FormLabelView(label: "Confirm your Password:")
+            FormInputView(placeholder: "Password Confirmation", input: $passwordConfirm)
+            
+            PrimaryButtonView(text: "Sign Up") {
+                errorMessages = []
+                signUp()
+            }
         }
-        if !(errorMessage.isEmpty){
-            Text("\(errorMessage)")
+        
+        if !(errorMessages.isEmpty){
+            VStack {
+                ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
+                    AlertView(message: errorMessage)
+                }
+            }
         }
     }
 }

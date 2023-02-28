@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function TodoPage() {
   const [task, setTask] = useState("");
   const [allTodos, setAllTodos] = useState([]);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState("");
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function TodoPage() {
       headers: { authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
-      setError("");
+      setErrors("");
       getAllTodos();
     } else {
     }
@@ -50,7 +50,7 @@ export default function TodoPage() {
       headers: { authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
-      setError("");
+      setErrors("");
       getAllTodos();
     } else {
     }
@@ -76,7 +76,7 @@ export default function TodoPage() {
       setTask("");
       getAllTodos();
     } else {
-      setError(resJson.messages);
+      setErrors(resJson.messages);
     }
   };
 
@@ -85,7 +85,7 @@ export default function TodoPage() {
       <div className="flex flex-col items-center justify-center align-middle pt-5">
         <div
           class={`alert alert-error shadow-lg w-1/2 ${
-            error === "" ? "hidden" : ""
+            errors === "" ? "hidden" : ""
           }`}
         >
           <div>
@@ -102,7 +102,10 @@ export default function TodoPage() {
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{error}</span>
+
+            {errors.map((error) => (
+              <span>{error}</span>
+            ))}
           </div>
         </div>
         <button
@@ -122,7 +125,7 @@ export default function TodoPage() {
                   class="input input-bordered input-primary w-full max-w-xs"
                   onChange={(e) => setTask(e.target.value)}
                   onFocus={(e) => {
-                    setError("");
+                    setErrors("");
                   }}
                 />
               </label>{" "}

@@ -130,16 +130,17 @@ struct TodosView: View {
     }
     var body: some View {
         ZStack {
-            Color("ColorBlue")
+            Color("ColorBackground")
                 .ignoresSafeArea(.all, edges:.all)
             
             VStack {
                 // MARK: - HEADER
                 Text("Todos:").font(.largeTitle)
-                Button("Delete All Todos") {
+                SecondaryButtonView(text: "Delete All Todos") {
                     handleDeleteAll()
                 }
-                Button("Complete All Todos") {
+                
+                SecondaryButtonView(text: "Complete All Todos") {
                     handleCompleteAll()
                 }
                 
@@ -158,7 +159,7 @@ struct TodosView: View {
                     .padding()
                     .border(Color.gray, width: 1)
                 
-                Button("Create Todo") {
+                PrimaryButtonView(text: "Create Todo") {
                     handleCreateTodo()
                 }
             }
