@@ -8,29 +8,38 @@
 import SwiftUI
 
 struct LoginView: View {
+    @State var email = ""
+    @State var password = ""
+    @State var errorMessage = ""
+    
     func logIn() {
         guard let url = URL(string: "http://localhost:5000/users/login") else {
             print("Invalid URL")
             return
         }
-//        TODO: Login Function
-//        guard let bodyData = try? JSONSerialization.data(withJSONObject: ["key": "value"]) else { return }
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: ["email": email, "password": password]) else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-//        request.httpBody = bodyData
+        request.httpBody = bodyData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             
             if let error = error {
                 print("Error: \(error.localizedDescription)")
-            } else if let data = data {
+            } else if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    print("Response: \(json)")
-                    // You can now use the JSON object in your code
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])as? [String: Any]
+                    if response.statusCode != 200 {
+                        errorMessage = json?["messages"] as? String ?? ""
+                        print("Response: \(errorMessage)")
+                    } else {
+                        email = ""
+                        password = ""
+                    }
+                    
                 } catch {
                     print("Error parsing JSON: \(error.localizedDescription)")
                 }
@@ -39,7 +48,22 @@ struct LoginView: View {
     }
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Enter your Email:")
+        TextField("Email", text: $email)
+            .padding()
+            .border(Color.gray, width: 1)
+        Text("Enter your Password:")
+        TextField("Password", text: $password)
+            .padding()
+            .border(Color.gray, width: 1)
+        
+        Button("Log In") {
+            errorMessage = ""
+            logIn()
+        }
+        if !(errorMessage.isEmpty){
+            Text("\(errorMessage)")
+        }
     }
     
 }
