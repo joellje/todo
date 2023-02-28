@@ -11,6 +11,9 @@ struct LoginView: View {
     @State var email = ""
     @State var password = ""
     @State var errorMessages = [String]()
+    @State var errorMessagesString = ""
+    @State var hasErrors = false
+    @AppStorage("stage") var stage: String = "login"
     
     func logIn() {
         guard let url = URL(string: "http://localhost:5000/users/login") else {
@@ -35,11 +38,14 @@ struct LoginView: View {
                     if response.statusCode != 200 {
                         if let dictionary = json, let messages = dictionary["messages"] as? [String] {
                             errorMessages = messages
+                            errorMessagesString = errorMessages.joined(separator: "\n")
+                            hasErrors = true
                             print("Response: \(errorMessages)")
                         }
                     } else {
                         email = ""
                         password = ""
+                        stage = "todos"
                     }
                     
                 } catch {
@@ -50,39 +56,60 @@ struct LoginView: View {
     }
     
     var body: some View {
+        
         ZStack {
             Color("ColorBackground")
                 .ignoresSafeArea(.all, edges:.all)
             
-            
             VStack {
-                FormLabelView(label: "Enter your Email:")
-                FormInputView(placeholder: "Email", input: $email)
-                FormLabelView(label: "Enter your Password:")
-                FormInputView(placeholder: "Password", input: $password)
+                Button(action: {
+                    stage = "onboarding"
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Back")
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }.padding(.leading, 10)
+                }
                 
-                PrimaryButtonView(text: "Log In") {
-                    errorMessages = []
-                    logIn()
-                }
-            }
-            
-            if !(errorMessages.isEmpty){
+                Spacer()
+                
                 VStack {
-                    ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
-                        AlertView(message: errorMessage)
+                    FormLabelView(label: "Enter your Email:")
+                    FormInputView(placeholder: "Email", input: $email)
+                    FormLabelView(label: "Enter your Password:")
+                    FormInputView(placeholder: "Password", input: $password)
+                    
+                    PrimaryButtonView(text: "Log In") {
+                        errorMessages = []
+                        logIn()
                     }
+                }.alert(
+                    "Input Errors",
+                    isPresented: $hasErrors
+                ) {
+                    Button("Cancel") {
+                        hasErrors = false
+                        errorMessages = []
+                    }
+                } message: {
+                    Text(errorMessagesString)
                 }
+
+                
+//                if !(errorMessages.isEmpty){
+//                    VStack {
+//                        ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
+//                            AlertView(message: errorMessage)
+//                        }
+//                    }
+//                }
+                Spacer()
             }
         }
-        
-        
-        
-        
-        
-        
     }
-    
 }
 
 struct LoginView_Previews: PreviewProvider {

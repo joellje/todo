@@ -61,26 +61,37 @@ struct TodoView: View {
     }
     
     var body: some View {
-        HStack {
-            Text(name)
-                .fontWeight(.semibold)
+        ZStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white)
+                .shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2)
+                .padding(.horizontal)
+                .frame(height: 50)
             
-            Spacer()
-            
-            completed ? Button(action: {
-                handleToggle()
-            }) {
-                Image(systemName: "checkmark.square")
-            }: Button(action: {
-                handleToggle()
-            }) {
-                Image(systemName: "square")
-            }
-            
-            Button("Delete") {
-                handleDelete()
-            }
-        }.padding(.horizontal, 20)
+            HStack {
+                Text(name)
+                    .fontWeight(.semibold)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                
+                Spacer()
+                
+                completed ? Button(action: {
+                    handleToggle()
+                }) {
+                    Image(systemName: "checkmark.square")
+                }: Button(action: {
+                    handleToggle()
+                }) {
+                    Image(systemName: "square")
+                }
+                
+                Button("Delete") {
+                    handleDelete()
+                }
+            }.padding(.horizontal, 26)
+        }.padding(.bottom, 5)
+        
     }
 }
 

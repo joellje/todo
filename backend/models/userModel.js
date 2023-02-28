@@ -6,17 +6,17 @@ const crypto = require("crypto");
 const userSchema = mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please enter a name!"],
+    required: [true, "Please enter a name."],
   },
   password: {
     type: String,
-    required: [true, "Please enter a password!"],
+    required: [true, "Please enter a password."],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please confirm your password!"],
+    required: [true, "Please confirm your password."],
     validate: {
       validator: function (el) {
         return el === this.password;
@@ -26,9 +26,9 @@ const userSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "Please enter an email!"],
+    required: [true, "Please enter an email."],
     unique: true,
-    validate: [validator.isEmail, "Please enter a correct email!"],
+    validate: [validator.isEmail, "Please enter a correct email."],
   },
   passwordChangedAt: {
     type: Date,
@@ -50,8 +50,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.pre('save', function(next) {
-  if (!this.isModified('password') || this.isNew) return next();
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();

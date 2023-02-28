@@ -13,6 +13,9 @@ struct SignupView: View {
     @State var password = ""
     @State var passwordConfirm = ""
     @State var errorMessages = [String]()
+    @State var errorMessagesString = ""
+    @State var hasErrors = false
+    @AppStorage("stage") var stage: String = "signup"
     
     func signUp() {
         guard let url = URL(string: "http://localhost:5000/users/signup") else {
@@ -37,6 +40,8 @@ struct SignupView: View {
                     if response.statusCode != 201 {
                         if let dictionary = json, let messages = dictionary["messages"] as? [String] {
                             errorMessages = messages
+                            errorMessagesString = errorMessages.joined(separator: "\n")
+                            hasErrors = true
                             print("Response: \(errorMessages)")
                         }
                     } else {
@@ -54,32 +59,68 @@ struct SignupView: View {
     }
     
     var body: some View {
-        Color("ColorBackground")
-            .ignoresSafeArea(.all, edges:.all)
         
-        VStack {
-            FormLabelView(label: "Enter your Name:")
-            FormInputView(placeholder: "Name", input: $name)
-            FormLabelView(label: "Enter your Email:")
-            FormInputView(placeholder: "Email", input: $email)
-            FormLabelView(label: "Enter your Password:")
-            FormInputView(placeholder: "Password", input: $password)
-            FormLabelView(label: "Confirm your Password:")
-            FormInputView(placeholder: "Password Confirmation", input: $passwordConfirm)
+        ZStack {
+            Color("ColorBackground")
+                .ignoresSafeArea(.all, edges:.all)
             
-            PrimaryButtonView(text: "Sign Up") {
-                errorMessages = []
-                signUp()
+            VStack {
+                Button(action: {
+                    stage = "onboarding"
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Back")
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }.padding(.leading, 10)
+                }
+                
+                Spacer()
+                
+                VStack {
+                    FormLabelView(label: "Enter your Name:")
+                    FormInputView(placeholder: "Name", input: $name)
+                    FormLabelView(label: "Enter your Email:")
+                    FormInputView(placeholder: "Email", input: $email)
+                    FormLabelView(label: "Enter your Password:")
+                    FormInputView(placeholder: "Password", input: $password)
+                    FormLabelView(label: "Confirm your Password:")
+                    FormInputView(placeholder: "Password Confirmation", input: $passwordConfirm)
+                    
+                    PrimaryButtonView(text: "Sign Up") {
+                        errorMessages = []
+                        signUp()
+                    }
+                }.alert(
+                    "Input Errors",
+                    isPresented: $hasErrors
+                ) {
+                    Button("Cancel") {
+                        hasErrors = false
+                        errorMessages = []
+                    }
+                } message: {
+                    Text(errorMessagesString)
+                }
+                
+//                if !(errorMessages.isEmpty){
+//                    VStack {
+//                        ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
+//                            AlertView(message: errorMessage)
+//                        }
+//                    }
+//                }
+                
+                Spacer()
             }
+            
+            
         }
         
-        if !(errorMessages.isEmpty){
-            VStack {
-                ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
-                    AlertView(message: errorMessage)
-                }
-            }
-        }
+        
+        
     }
 }
 

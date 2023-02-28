@@ -12,9 +12,15 @@ struct FormInputView: View {
     @Binding var input: String
     
     var body: some View {
-        TextField(placeholder, text: $input)
-            .padding()
-            .border(Color.gray, width: 1)
+        ZStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white)
+                .shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2)
+                .padding(.horizontal)
+                .frame(height: 50)
+            TextField(placeholder, text: $input)
+                .padding(.horizontal, 26)
+        }.padding(.bottom, 10)
     }
 }
 

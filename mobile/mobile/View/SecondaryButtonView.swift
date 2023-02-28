@@ -14,7 +14,7 @@ struct SecondaryButtonView: View {
     var body: some View {
         Button(action: action) {
             Text(text)
-        }.buttonStyle(.bordered).tint(Color("ColorSecondary"))
+        }.buttonStyle(.borderedProminent).tint(Color("ColorSecondary"))
     }
 }
 

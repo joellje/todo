@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("stage") var stage: String = "onboarding"
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack {
+            if stage == "onboarding" {
+                OnboardingView()
+            } else if stage == "login" {
+                LoginView()
+            } else if stage == "signup" {
+                SignupView()
+            } else if stage == "todos" {
+                TodosView()
+            } else {
+                OnboardingView()
+            }
         }
-        .padding()
     }
 }
 

@@ -34,7 +34,7 @@ module.exports = (err, req, res, next) => {
     if (err.name === "JsonWebTokenError") {
       handleJWTError(res);
     } else {
-      res.status(err.code).send({ messages: err.message });
+      res.status(err.code).send({ messages: [err.message] });
     }
   } catch (err) {
     res.status(500).send("An unknown error occurred.");

@@ -10,7 +10,7 @@ import SwiftUI
 struct FormLabelView: View {
     var label = ""
     var body: some View {
-        Text(label)
+        Text(label).foregroundColor(.white)
     }
 }
 
