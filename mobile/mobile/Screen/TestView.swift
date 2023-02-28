@@ -1,26 +1,25 @@
 //
-//  LoginView.swift
+//  TestView.swift
 //  mobile
 //
-//  Created by Joel Lim on 26/2/23.
+//  Created by Joel Lim on 27/2/23.
 //
 
 import SwiftUI
 
-struct LoginView: View {
-    func logIn() {
-        guard let url = URL(string: "http://localhost:5000/users/login") else {
+struct TestView: View {
+    
+    let token = ProcessInfo.processInfo.environment["token"]
+
+    func getTodo() {
+        guard let url = URL(string: "http://localhost:5000/todos/") else {
             print("Invalid URL")
             return
         }
-//        TODO: Login Function
-//        guard let bodyData = try? JSONSerialization.data(withJSONObject: ["key": "value"]) else { return }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-//        request.httpBody = bodyData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        request.httpMethod = "GET"
+        request.setValue(token, forHTTPHeaderField: "authorization")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             
@@ -39,13 +38,18 @@ struct LoginView: View {
     }
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Button("Get Todo") {
+                getTodo()
+            }
+            .padding()
+        }
+        
     }
-    
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct TestView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        TestView()
     }
 }

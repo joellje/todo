@@ -7,26 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE8B855229ADAA0900DB7B3A /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8B855129ADAA0900DB7B3A /* TestView.swift */; };
 		FEB5651C29AC709C00ACC546 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5651B29AC709C00ACC546 /* LoginView.swift */; };
 		FEB5651E29AC70A600ACC546 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5651D29AC70A600ACC546 /* SignupView.swift */; };
 		FEB5652029AC70B000ACC546 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5651F29AC70B000ACC546 /* OnboardingView.swift */; };
+		FEB5652229AC7AC300ACC546 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB5652129AC7AC300ACC546 /* TodoView.swift */; };
 		FEBA30CF29AC6EE200021DF6 /* mobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBA30CE29AC6EE200021DF6 /* mobileApp.swift */; };
 		FEBA30D129AC6EE200021DF6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBA30D029AC6EE200021DF6 /* ContentView.swift */; };
 		FEBA30D329AC6EE300021DF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEBA30D229AC6EE300021DF6 /* Assets.xcassets */; };
 		FEBA30D629AC6EE300021DF6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEBA30D529AC6EE300021DF6 /* Preview Assets.xcassets */; };
-		FEBA30DF29AC6FBD00021DF6 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBA30DE29AC6FBD00021DF6 /* TodoView.swift */; };
+		FEBA30DF29AC6FBD00021DF6 /* TodosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBA30DE29AC6FBD00021DF6 /* TodosView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE8B855129ADAA0900DB7B3A /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		FEB5651B29AC709C00ACC546 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		FEB5651D29AC70A600ACC546 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		FEB5651F29AC70B000ACC546 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		FEB5652129AC7AC300ACC546 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		FEBA30CB29AC6EE200021DF6 /* mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEBA30CE29AC6EE200021DF6 /* mobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mobileApp.swift; sourceTree = "<group>"; };
 		FEBA30D029AC6EE200021DF6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FEBA30D229AC6EE300021DF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FEBA30D529AC6EE300021DF6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FEBA30DE29AC6FBD00021DF6 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
+		FEBA30DE29AC6FBD00021DF6 /* TodosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				FEBA30D029AC6EE200021DF6 /* ContentView.swift */,
+				FEB5652129AC7AC300ACC546 /* TodoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -87,10 +92,11 @@
 		FEBA30DD29AC6F2700021DF6 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
-				FEBA30DE29AC6FBD00021DF6 /* TodoView.swift */,
+				FEBA30DE29AC6FBD00021DF6 /* TodosView.swift */,
 				FEB5651B29AC709C00ACC546 /* LoginView.swift */,
 				FEB5651D29AC70A600ACC546 /* SignupView.swift */,
 				FEB5651F29AC70B000ACC546 /* OnboardingView.swift */,
+				FE8B855129ADAA0900DB7B3A /* TestView.swift */,
 			);
 			path = Screen;
 			sourceTree = "<group>";
@@ -166,8 +172,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEBA30D129AC6EE200021DF6 /* ContentView.swift in Sources */,
-				FEBA30DF29AC6FBD00021DF6 /* TodoView.swift in Sources */,
+				FEBA30DF29AC6FBD00021DF6 /* TodosView.swift in Sources */,
+				FEB5652229AC7AC300ACC546 /* TodoView.swift in Sources */,
 				FEB5651C29AC709C00ACC546 /* LoginView.swift in Sources */,
+				FE8B855229ADAA0900DB7B3A /* TestView.swift in Sources */,
 				FEB5652029AC70B000ACC546 /* OnboardingView.swift in Sources */,
 				FEBA30CF29AC6EE200021DF6 /* mobileApp.swift in Sources */,
 				FEB5651E29AC70A600ACC546 /* SignupView.swift in Sources */,
