@@ -156,22 +156,31 @@ struct TodosView: View {
                     stage = "onboarding"
                 }) {
                     HStack {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
+                        Spacer()
                         Text("Logout")
                             .fontWeight(.semibold)
-                        Spacer()
+                            .padding()
+                        
                     }.padding(.leading, 10)
                 }
                 
                 // MARK: - HEADER
-                Text("Todos:").font(.largeTitle)
-                SecondaryButtonView(text: "Delete All Todos") {
-                    handleDeleteAll()
-                }
+                Text("Your Todos")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding(.vertical, 5)
                 
-                SecondaryButtonView(text: "Complete All Todos") {
-                    handleCompleteAll()
+                HStack {
+                    SecondaryButtonView(text: "Delete All Todos") {
+                        handleDeleteAll()
+                    }
+                    
+                    SecondaryButtonView(text: "Complete All Todos") {
+                        handleCompleteAll()
+                    }
                 }
                 
                 Spacer()
@@ -183,7 +192,7 @@ struct TodosView: View {
                             TodoView(id: todo.id, name: todo.task, completed: todo.completed, handleGetTodos: handleGetTodos)
                         }
                     }
-                }.padding(.vertical, 2)
+                }.padding(.vertical, 10)
                 
                 Spacer()
                 

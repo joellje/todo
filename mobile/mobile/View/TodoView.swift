@@ -89,7 +89,7 @@ struct TodoView: View {
                 Button("Delete") {
                     handleDelete()
                 }
-            }.padding(.horizontal, 26)
+            }.padding(.horizontal, 36)
         }.padding(.bottom, 5)
         
     }
