@@ -16,6 +16,7 @@ struct SignupView: View {
     @State var errorMessagesString = ""
     @State var hasErrors = false
     @AppStorage("stage") var stage: String = "signup"
+    @AppStorage("token") var token: String = ""
     
     func signUp() {
         guard let url = URL(string: "http://localhost:5000/users/signup") else {
@@ -49,6 +50,7 @@ struct SignupView: View {
                         email = ""
                         password = ""
                         passwordConfirm = ""
+                        stage = "login"
                     }
                     
                 } catch {
@@ -104,14 +106,6 @@ struct SignupView: View {
                 } message: {
                     Text(errorMessagesString)
                 }
-                
-//                if !(errorMessages.isEmpty){
-//                    VStack {
-//                        ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
-//                            AlertView(message: errorMessage)
-//                        }
-//                    }
-//                }
                 
                 Spacer()
             }

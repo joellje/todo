@@ -14,6 +14,7 @@ struct LoginView: View {
     @State var errorMessagesString = ""
     @State var hasErrors = false
     @AppStorage("stage") var stage: String = "login"
+    @AppStorage("token") var token: String = ""
     
     func logIn() {
         guard let url = URL(string: "http://localhost:5000/users/login") else {
@@ -43,6 +44,9 @@ struct LoginView: View {
                             print("Response: \(errorMessages)")
                         }
                     } else {
+                        if let dictionary = json, let tokenString = dictionary["token"] as? String {
+                            token = "Bearer " + tokenString
+                        }
                         email = ""
                         password = ""
                         stage = "todos"
@@ -98,14 +102,6 @@ struct LoginView: View {
                     Text(errorMessagesString)
                 }
 
-                
-//                if !(errorMessages.isEmpty){
-//                    VStack {
-//                        ForEach(Array(errorMessages.enumerated()), id: \.offset) { index, errorMessage in
-//                            AlertView(message: errorMessage)
-//                        }
-//                    }
-//                }
                 Spacer()
             }
         }

@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @AppStorage("stage") var stage: String = "onboarding"
     
+    // TODO: Enable Transition between Views
     var body: some View {
         ZStack {
             if stage == "onboarding" {

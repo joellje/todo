@@ -10,11 +10,11 @@ import SwiftUI
 
 
 struct TodosView: View {
-    let token = ProcessInfo.processInfo.environment["token"]
     @AppStorage("stage") var stage: String = "todos"
     @State var errorMessages = [String]()
     @State var errorMessagesString = ""
     @State var hasErrors = false
+    @AppStorage("token") var token: String = ""
     
     struct Todo: Codable, Identifiable {
         var id: String
@@ -152,6 +152,7 @@ struct TodosView: View {
             
             VStack {
                 Button(action: {
+                    token = ""
                     stage = "onboarding"
                 }) {
                     HStack {
