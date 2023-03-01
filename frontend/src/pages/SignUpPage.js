@@ -7,7 +7,7 @@ function LandingPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   let navigate = useNavigate();
 
   const handleLoginRedirect = () => {
@@ -40,8 +40,7 @@ function LandingPage() {
       setPasswordConfirm("");
       navigate("/");
     } else {
-      console.log(resJson.messages);
-      setError(resJson.messages);
+      setErrors(resJson.messages);
     }
   };
 
@@ -49,7 +48,7 @@ function LandingPage() {
     <div className="App">
       <div
         className={`bg-inherit flex flex-row items-center justify-center align-middle my-2 ${
-          error === "" ? "hidden" : ""
+          errors === "" ? "hidden" : ""
         }`}
       >
         <div class={`alert alert-error shadow-lg w-1/2 `}>
@@ -67,7 +66,9 @@ function LandingPage() {
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{error}</span>
+            {errors.map((error) => (
+              <span>{error}</span>
+            ))}
           </div>
         </div>
       </div>
