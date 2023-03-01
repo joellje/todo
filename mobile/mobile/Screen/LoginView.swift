@@ -13,10 +13,12 @@ struct LoginView: View {
     @State var errorMessages = [String]()
     @State var errorMessagesString = ""
     @State var hasErrors = false
+    @State var isLoading = false
     @AppStorage("stage") var stage: String = "login"
     @AppStorage("token") var token: String = ""
     
     func logIn() {
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/users/login") else {
             print("Invalid URL")
             return
@@ -38,6 +40,7 @@ struct LoginView: View {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])as? [String: Any]
                     if response.statusCode != 200 {
                         if let dictionary = json, let messages = dictionary["messages"] as? [String] {
+                            isLoading = false
                             errorMessages = messages
                             errorMessagesString = errorMessages.joined(separator: "\n")
                             hasErrors = true
@@ -46,7 +49,9 @@ struct LoginView: View {
                     } else {
                         if let dictionary = json, let tokenString = dictionary["token"] as? String {
                             token = "Bearer " + tokenString
+                            print(token)
                         }
+                        isLoading = false
                         email = ""
                         password = ""
                         stage = "todos"
@@ -78,6 +83,15 @@ struct LoginView: View {
                     }.padding(.leading, 10)
                 }
                 
+                Text("Log In")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding(.vertical, 5)
+                
+                
                 Spacer()
                 
                 VStack {
@@ -101,10 +115,22 @@ struct LoginView: View {
                 } message: {
                     Text(errorMessagesString)
                 }
-
+                
                 Spacer()
             }
+            
+            if isLoading {
+                Color("ColorBackground")
+                    .opacity(0.8)
+                    .ignoresSafeArea(.all, edges:.all)
+                
+                ProgressView("Loading...")
+                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    .foregroundColor(Color.white)
+                    .frame(height: 50)
+            }
         }
+        
     }
 }
 

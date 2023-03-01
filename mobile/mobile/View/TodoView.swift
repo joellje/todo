@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TodoView: View {
-    let token = ProcessInfo.processInfo.environment["token"]
+    @AppStorage("token") var token: String = ""
     
     var id: String
     var name: String

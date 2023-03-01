@@ -32,13 +32,16 @@ struct OnboardingView: View {
                         .padding(.horizontal, 20)
                     
                     
-                    PrimaryButtonView(text: "Log In") {
-                        stage = "login"
-                    }
+                    HStack {
+                        PrimaryButtonView(text: "Log In") {
+                            stage = "login"
+                        }
+                        
+                        SecondaryButtonView(text: "Sign Up") {
+                            stage = "signup"
+                        }
+                    }.padding(.top, 10)
                     
-                    SecondaryButtonView(text: "Sign Up") {
-                        stage = "signup"
-                    }
                 }
                 
             }

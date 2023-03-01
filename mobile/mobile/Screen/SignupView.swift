@@ -15,10 +15,11 @@ struct SignupView: View {
     @State var errorMessages = [String]()
     @State var errorMessagesString = ""
     @State var hasErrors = false
+    @State var isLoading = false
     @AppStorage("stage") var stage: String = "signup"
-    @AppStorage("token") var token: String = ""
     
     func signUp() {
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/users/signup") else {
             print("Invalid URL")
             return
@@ -39,6 +40,7 @@ struct SignupView: View {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     if response.statusCode != 201 {
+                        isLoading = false
                         if let dictionary = json, let messages = dictionary["messages"] as? [String] {
                             errorMessages = messages
                             errorMessagesString = errorMessages.joined(separator: "\n")
@@ -46,6 +48,7 @@ struct SignupView: View {
                             print("Response: \(errorMessages)")
                         }
                     } else {
+                        isLoading = false
                         name = ""
                         email = ""
                         password = ""
@@ -79,6 +82,15 @@ struct SignupView: View {
                     }.padding(.leading, 10)
                 }
                 
+                Text("Sign Up")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding(.vertical, 5)
+                
+                
                 Spacer()
                 
                 VStack {
@@ -108,6 +120,17 @@ struct SignupView: View {
                 }
                 
                 Spacer()
+            }
+            
+            if isLoading {
+                Color("ColorBackground")
+                    .opacity(0.8)
+                    .ignoresSafeArea(.all, edges:.all)
+                
+                ProgressView("Loading...")
+                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    .foregroundColor(Color.white)
+                    .frame(height: 50)
             }
             
             

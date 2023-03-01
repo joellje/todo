@@ -3,7 +3,7 @@ const handleDuplicateKeyError = (err, res) => {
   const field = Object.keys(err.keyValue);
   const code = 409;
   const error = `That ${field} already exists.`;
-  res.status(code).send({ messages: error, fields: field });
+  res.status(code).send({ messages: [error], fields: field });
 };
 
 //handle field formatting and empty fields

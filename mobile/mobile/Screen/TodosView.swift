@@ -14,6 +14,7 @@ struct TodosView: View {
     @State var errorMessages = [String]()
     @State var errorMessagesString = ""
     @State var hasErrors = false
+    @State var isLoading = false
     @AppStorage("token") var token: String = ""
     
     struct Todo: Codable, Identifiable {
@@ -35,6 +36,7 @@ struct TodosView: View {
     
     
     func handleCreateTodo(){
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/todos/") else {
             print("Invalid URL")
             return
@@ -58,12 +60,14 @@ struct TodosView: View {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     if response.statusCode != 200 {
                         if let dictionary = json, let messages = dictionary["messages"] as? [String] {
+                            isLoading = false
                             errorMessages = messages
                             errorMessagesString = errorMessages.joined(separator: "\n")
                             hasErrors = true
                             print("Response: \(errorMessages)")
                         }
                     } else {
+                        isLoading = false
                         newTask = ""
                         handleGetTodos()
                     }
@@ -77,6 +81,7 @@ struct TodosView: View {
     }
     
     func handleGetTodos() {
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/todos/") else {
             print("Invalid URL")
             return
@@ -92,6 +97,7 @@ struct TodosView: View {
                 print("Error: \(error.localizedDescription)")
             } else if let data = data {
                 do {
+                    isLoading = false
                     let decoder = JSONDecoder()
                     let todos = try decoder.decode([Todo].self, from: data)
                     todoArray = todos
@@ -103,6 +109,7 @@ struct TodosView: View {
     }
     
     func handleDeleteAll() {
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/todos/") else {
             print("Invalid URL")
             return
@@ -114,6 +121,7 @@ struct TodosView: View {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                isLoading = false
                 print("Error: \(error.localizedDescription)")
             } else if let data = data {
                 handleGetTodos()
@@ -125,6 +133,7 @@ struct TodosView: View {
     }
     
     func handleCompleteAll() {
+        isLoading = true
         guard let url = URL(string: "http://localhost:5000/todos/") else {
             print("Invalid URL")
             return
@@ -136,6 +145,7 @@ struct TodosView: View {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                isLoading = false
                 print("Error: \(error.localizedDescription)")
             } else if let data = data {
                 handleGetTodos()
@@ -234,6 +244,17 @@ struct TodosView: View {
             }
         } message: {
             Text(errorMessagesString)
+        }
+        
+        if isLoading {
+            Color("ColorBackground")
+                .opacity(0.8)
+                .ignoresSafeArea(.all, edges:.all)
+            
+            ProgressView("Loading...")
+                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                .foregroundColor(Color.white)
+                .frame(height: 50)
         }
     }
 }
