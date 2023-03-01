@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function TodoPage() {
   const [task, setTask] = useState("");
   const [allTodos, setAllTodos] = useState([]);
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState([]);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function TodoPage() {
       headers: { authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
-      setErrors("");
+      setErrors([]);
       getAllTodos();
     } else {
     }
@@ -50,7 +50,7 @@ export default function TodoPage() {
       headers: { authorization: `Bearer ${token}` },
     });
     if (res.status === 200) {
-      setErrors("");
+      setErrors([]);
       getAllTodos();
     } else {
     }
@@ -85,7 +85,7 @@ export default function TodoPage() {
       <div className="flex flex-col items-center justify-center align-middle pt-5">
         <div
           class={`alert alert-error shadow-lg w-1/2 ${
-            errors === "" ? "hidden" : ""
+            errors.length === 0 ? "hidden" : ""
           }`}
         >
           <div>
@@ -125,7 +125,7 @@ export default function TodoPage() {
                   class="input input-bordered input-primary w-full max-w-xs"
                   onChange={(e) => setTask(e.target.value)}
                   onFocus={(e) => {
-                    setErrors("");
+                    setErrors([]);
                   }}
                 />
               </label>{" "}

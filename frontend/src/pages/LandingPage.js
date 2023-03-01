@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function LandingPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function LandingPage() {
       localStorage.setItem("token", resJson.token);
       navigate(`/todo`);
     } else {
-      setError(resJson.messages);
+      setErrors(resJson.messages);
     }
   };
 
@@ -44,7 +44,7 @@ function LandingPage() {
     <div className="App">
       <div
         className={`bg-inherit flex flex-row items-center justify-center align-middle my-2 ${
-          error === "" ? "hidden" : ""
+          errors.length === 0 ? "hidden" : ""
         }`}
       >
         <div class="alert alert-error shadow-lg w-1/2">
@@ -62,7 +62,9 @@ function LandingPage() {
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{error}</span>
+            {errors.map((error) => (
+              <span>{error}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -83,6 +85,9 @@ function LandingPage() {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control">
@@ -93,6 +98,9 @@ function LandingPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control mt-6">

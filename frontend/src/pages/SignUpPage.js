@@ -48,7 +48,7 @@ function LandingPage() {
     <div className="App">
       <div
         className={`bg-inherit flex flex-row items-center justify-center align-middle my-2 ${
-          errors === "" ? "hidden" : ""
+          errors.length === 0 ? "hidden" : ""
         }`}
       >
         <div class={`alert alert-error shadow-lg w-1/2 `}>
@@ -111,6 +111,9 @@ function LandingPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control">
@@ -121,6 +124,9 @@ function LandingPage() {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control">
@@ -131,6 +137,9 @@ function LandingPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control">
@@ -141,6 +150,9 @@ function LandingPage() {
                 type="password"
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
+                onFocus={(e) => {
+                  setErrors([]);
+                }}
               />
             </div>
             <div class="form-control mt-6">
