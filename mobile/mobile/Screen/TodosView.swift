@@ -196,12 +196,30 @@ struct TodosView: View {
                 
                 Spacer()
                 
+                
                 FormLabelView(label: "Enter your Task:")
-                FormInputView(placeholder: "Task", input: $newTask)
+                    .padding(.horizontal, 20)
+                HStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.white)
+                            .frame(height: 50)
+                            .padding(.horizontal, 10)
+                        TextField("Task", text: $newTask)
+                            .frame(height: 50)
+                            .padding(.horizontal, 20)
+                    }
 
-                PrimaryButtonView(text: "Create Todo") {
-                    handleCreateTodo()
+                    PrimaryButtonView(text: "+") {
+                        handleCreateTodo()
+                    }.frame(height: 50)
+                    
+                    Spacer()
                 }
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+                
+                
             }
         }
         .onAppear {

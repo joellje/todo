@@ -31,6 +31,7 @@ struct OnboardingView: View {
                         .padding(.bottom, 20)
                         .padding(.horizontal, 20)
                     
+                    
                     PrimaryButtonView(text: "Log In") {
                         stage = "login"
                     }
