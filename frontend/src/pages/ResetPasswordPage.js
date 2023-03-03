@@ -2,56 +2,72 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [emailResetSuccess, setEmailResetSuccess] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
+
   let navigate = useNavigate();
 
-  const handleLoginRedirect = () => {
-    navigate(`/`);
+  const handleTodoRedirect = () => {
+    navigate(`/todos`);
   };
 
-  const handleSignup = async (event) => {
+  const handlePasswordResetSuccess = () => {
+    setEmailResetSuccess(true);
+    setCurrentPassword("");
+    setNewPassword("");
+    setNewPasswordConfirm("");
+    setTimeout(() => {
+      setEmailResetSuccess(false);
+      navigate(`/todos`);
+    }, "3000");
+  };
+
+  const handlePasswordReset = async (event) => {
     event.preventDefault();
+    if (currentPassword === newPassword) {
+      setErrors([
+        "Your new password cannot be the same as your current password.",
+      ]);
+      return;
+    }
     setLoading(true);
 
-    const res = await fetch("http://localhost:5000/users/signup", {
-      method: "POST",
+    const res = await fetch("http://localhost:5000/users/updatePassword", {
+      method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        name: `${name}`,
-        email: `${email}`,
-        password: `${password}`,
-        passwordConfirm: `${passwordConfirm}`,
+        passwordCurrent: `${currentPassword}`,
+        password: `${newPassword}`,
+        passwordConfirm: `${newPasswordConfirm}`,
       }),
     });
     const resJson = await res.json();
     setLoading(false);
-    if (res.status === 201) {
-      setName("");
-      setEmail("");
-      setPassword("");
-      setPasswordConfirm("");
-      navigate("/");
+    if (res.status === 200) {
+      localStorage.setItem("token", resJson.token);
+      handlePasswordResetSuccess();
     } else {
       setErrors(resJson.messages);
     }
   };
 
   return (
-    <div className="App">
+    <>
       <div
         className={`bg-base-200 flex flex-row items-center justify-center align-middle pt-2 ${
           errors.length === 0 ? "hidden" : ""
         }`}
       >
-        <div class={`alert alert-error shadow-lg w-1/2 `}>
+        <div class="alert alert-error shadow-lg w-1/2">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,10 +90,36 @@ function LandingPage() {
       </div>
 
       <div
-        class="tooltip tooltip-left fixed top-3 right-3"
-        data-tip="Back to Login"
+        className={`bg-base-200 flex flex-row items-center justify-center align-middle pt-2 ${
+          emailResetSuccess ? "" : "hidden"
+        }`}
       >
-        <button class="btn btn-square" onClick={handleLoginRedirect}>
+        <div className="alert alert-success shadow-lg w-1/2">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>
+              Your password has been reset. You will be redirected soon.
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tooltip tooltip-left fixed top-3 right-3"
+        data-tip="Back to Todos"
+      >
+        <button class="btn btn-square" onClick={handleTodoRedirect}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -96,21 +138,21 @@ function LandingPage() {
       </div>
 
       <div class="hero min-h-screen bg-base-200 flex flex-col gap-5 justify-center">
-        <h1 class="text-5xl font-bold">Sign Up!</h1>
-        <h2 class="text-3xl">
-          Sign up now for a smarter way to organize your life and accomplish
-          your goals.
-        </h2>
+        <h1 class="text-5xl font-bold">Reset Your Password</h1>
+        {/* <h2 class="text-3xl">
+          Streamline your day with a personalized todo app designed for you.
+        </h2> */}
+
         <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <div class="card-body">
             <div class="form-control">
               <label class="label">
-                <span class="label-text">Name</span>
+                <span class="label-text">Current Password:</span>
               </label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
                 onFocus={(e) => {
                   setErrors([]);
                 }}
@@ -118,25 +160,12 @@ function LandingPage() {
             </div>
             <div class="form-control">
               <label class="label">
-                <span class="label-text">Email</span>
-              </label>
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={(e) => {
-                  setErrors([]);
-                }}
-              />
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Password</span>
+                <span class="label-text">New Password</span>
               </label>
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 onFocus={(e) => {
                   setErrors([]);
                 }}
@@ -144,29 +173,30 @@ function LandingPage() {
             </div>
             <div class="form-control">
               <label class="label">
-                <span class="label-text">Confirm your Password</span>
+                <span class="label-text">Confirm New Password</span>
               </label>
               <input
                 type="password"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
+                value={newPasswordConfirm}
+                onChange={(e) => setNewPasswordConfirm(e.target.value)}
                 onFocus={(e) => {
                   setErrors([]);
                 }}
               />
             </div>
+
             <div class="form-control mt-6">
               <button
                 class={`btn btn-primary ${loading === true ? "loading" : " "}`}
-                onClick={handleSignup}
+                onClick={handlePasswordReset}
               >
-                Sign Up
+                Reset Password
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

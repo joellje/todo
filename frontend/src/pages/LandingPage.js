@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 function LandingPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailResetSent, setEmailResetSent] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
@@ -34,7 +35,33 @@ function LandingPage() {
       setPassword("");
 
       localStorage.setItem("token", resJson.token);
-      navigate(`/todo`);
+      navigate(`/todos`);
+    } else {
+      setErrors(resJson.messages);
+    }
+  };
+
+  const handleForgetPassword = async (event) => {
+    event.preventDefault();
+
+    const res = await fetch("http://localhost:5000/users/forgetPassword", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: `${email}`,
+      }),
+    });
+    const resJson = await res.json();
+    if (res.status === 200) {
+      setEmail("");
+      setErrors([]);
+      setEmailResetSent(true);
+      setTimeout(() => {
+        setEmailResetSent(false);
+      }, "3000");
     } else {
       setErrors(resJson.messages);
     }
@@ -43,7 +70,7 @@ function LandingPage() {
   return (
     <div className="App">
       <div
-        className={`bg-inherit flex flex-row items-center justify-center align-middle my-2 ${
+        className={`bg-base-200 flex flex-row items-center justify-center align-middle pt-2 ${
           errors.length === 0 ? "hidden" : ""
         }`}
       >
@@ -65,6 +92,31 @@ function LandingPage() {
             {errors.map((error) => (
               <span>{error}</span>
             ))}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`bg-base-200 flex flex-row items-center justify-center align-middle pt-2 ${
+          emailResetSent ? "" : "hidden"
+        }`}
+      >
+        <div className="alert alert-success shadow-lg w-1/2">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>The password reset link has been sent to your email.</span>
           </div>
         </div>
       </div>
@@ -102,7 +154,17 @@ function LandingPage() {
                   setErrors([]);
                 }}
               />
+              <label className="label">
+                <button
+                  href="#"
+                  className="label-text-alt link link-hover"
+                  onClick={handleForgetPassword}
+                >
+                  Forgot password?
+                </button>
+              </label>
             </div>
+
             <div class="form-control mt-6">
               <button
                 class={`btn btn-primary ${loading === true ? "loading" : " "}`}

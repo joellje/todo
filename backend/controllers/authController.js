@@ -22,7 +22,6 @@ const createSendToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -90,7 +89,7 @@ exports.protect = async (req, res, next) => {
     }
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decoded.id);
+
     // Check if user still exists
     const currentUser = await User.findById(decoded.id);
 
@@ -166,7 +165,7 @@ exports.forgetPassword = async (req, res, next) => {
 
     if (!user) {
       return next(
-        new newError("There is no user with this email address.", 404)
+        new newError("Please input your email in the 'Email' Field.", 404)
       );
     }
     const resetToken = user.createPasswordResetToken();
@@ -215,7 +214,7 @@ exports.updatePassword = async (req, res, next) => {
     if (
       !(await user.correctPassword(req.body.passwordCurrent, user.password))
     ) {
-      return next(new newError("Your password is wrong.", 500));
+      return next(new newError("Your current password is wrong.", 500));
     }
 
     // If so, update password

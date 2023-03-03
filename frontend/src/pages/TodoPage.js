@@ -14,9 +14,21 @@ export default function TodoPage() {
 
   const token = localStorage.getItem("token");
 
+  const handlePasswordResetRedirect = () => {
+    navigate(`/reset`);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate(`/`);
+  };
+
+  const handleNotLoggedIn = () => {
+    setErrors(["You are not logged in. You will be redirected shortly."]);
+    setTimeout(() => {
+      setErrors([]);
+      navigate(`/`);
+    }, "3000");
   };
 
   const getAllTodos = async () => {
@@ -24,11 +36,16 @@ export default function TodoPage() {
       method: "GET",
       headers: { authorization: `Bearer ${token}` },
     });
+
+    if (res.status === 401) {
+      handleNotLoggedIn(res.messages);
+    }
     const allTodos = await res.json();
+
     if (res.status === 200) {
       setAllTodos(allTodos);
     } else {
-      console.log("Error getting all Todos.");
+      setErrors(allTodos.messages);
     }
   };
 
@@ -37,10 +54,13 @@ export default function TodoPage() {
       method: "PUT",
       headers: { authorization: `Bearer ${token}` },
     });
+    const resJson = await res.json();
+
     if (res.status === 200) {
       setErrors([]);
       getAllTodos();
     } else {
+      setErrors(resJson.messages);
     }
   };
 
@@ -49,10 +69,13 @@ export default function TodoPage() {
       method: "DELETE",
       headers: { authorization: `Bearer ${token}` },
     });
+    const resJson = await res.json();
+
     if (res.status === 200) {
       setErrors([]);
       getAllTodos();
     } else {
+      setErrors(resJson.messages);
     }
   };
 
@@ -108,12 +131,7 @@ export default function TodoPage() {
             ))}
           </div>
         </div>
-        <button
-          class="fixed btn btn-secondary bottom-5 right-5"
-          onClick={handleLogout}
-        >
-          Log Out
-        </button>
+
         <div className="flex flex-col justify-center align-middle items-center mt-10 gap-7">
           <div className="flex flex-row gap-5 align-middle items-center">
             <div class="task-input">
@@ -163,6 +181,22 @@ export default function TodoPage() {
                 getAllTodos={getAllTodos}
               ></Todo>
             ))}
+          </div>
+        </div>
+        <div className="fixed bottom-5 right-5 flex flex-row gap-2">
+          <div>
+            <button
+              class="btn btn-secondary"
+              onClick={handlePasswordResetRedirect}
+            >
+              Reset your Password
+            </button>
+          </div>
+
+          <div>
+            <button class="btn btn-secondary" onClick={handleLogout}>
+              Log Out
+            </button>
           </div>
         </div>
       </div>
